@@ -1,23 +1,64 @@
-//Récupérations d'element du Dom
+// Récupération des éléments du DOM
 const gallery = document.querySelector('.gallery')
-const btnGroup = document.querySelectorAll('.btn')
+const btnGroup = document.querySelector(".btn-group")
+
 
 /**
- * Crée les différents éléments à rattacher au DOM et ajoute les données récupéré de l'API aux élements
- * @param {.json()} datas ---------------------------??quoi mettre?? ---------------------------------------------------------------
+ * Création des boutons avec classe et id
+ * @param {number} id 
+ * @param {string} name 
  */
-function addContent(datas) {
+function createListBtn(id, name) {
+    //Recupération/Creation de la liste de bouttons et des buttons
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="btn" id="${id}"> ${name} </button>`
+    btnGroup.appendChild(li)
+}
+
+// Fonction pour récupérer les catégories et générer les boutons
+async function getCategories() {
+    const url = "http://localhost:5678/api/categories"
+    try {
+        const resp = await fetch(url)
+        if (!resp.ok) throw new Error(resp.status)
+
+        const categories = await resp.json()
+        
+        // Création du bouton "Tous"
+        createListBtn(0, 'Tous')
+    
+        // Création des boutons pour chaque catégorie
+        for (const categorie of categories) {
+            createListBtn(categorie.id, categorie.name)
+        }
+
+        // Récupération de tous les boutons une fois créés
+        const listBtn = document.querySelectorAll(".btn")
+        listBtn.forEach(btn => {
+            btn.addEventListener('click', (event) => {
+                const btnId = parseInt(event.target.id);
+                if (btnId === 0) {
+                    getWorks();
+                } else {
+                    filterWorks(btnId);
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+/**
+ * Crée les éléments et ajoute les données récupérées de l'API aux éléments
+ * @param {Array} datas Data des travaux (works)
+ */
+function addWorks(datas) {
     gallery.innerHTML = ''//Reinitialise .gallery
     for (const data of datas) {
-        const figure = document.createElement('figure')
-        const image = document.createElement('img')
-        const figcaption = document.createElement('figcaption')
-
-        image.src = data.imageUrl
-        figcaption.innerText = data.title
-        gallery.appendChild(figure)
-        figure.appendChild(image)
-        figure.appendChild(figcaption)
+        const figure = document.createElement('figure');
+        figure.innerHTML = `<img src="${data.imageUrl}" alt="${data.title}"><figcaption>${data.title}</figcaption>`;
+        gallery.appendChild(figure);
     }
 }
 
@@ -33,7 +74,7 @@ async function getWorks() {
         }
         else {
             let works = await requete.json()
-            addContent(works)
+            addWorks(works)
         }
     } catch (error) {
         console.error(error.message)
@@ -54,7 +95,7 @@ async function filterWorks(id) {
         else {
             let works = await requete.json()
             const filteredWorks = Array.from(works)
-            addContent(filteredWorks.filter((work) => work.categoryId == id))
+            addWorks(filteredWorks.filter((work) => work.categoryId == id))
         }
 
     } catch (error) {
@@ -63,24 +104,8 @@ async function filterWorks(id) {
 
 }
 
-getWorks(gallery)
+getCategories()
+getWorks()
 
-//Ecoute de l'evenement click sur les boutons et affichage des elements en fonction du bouton sélectionné
-for (const btn of btnGroup) {
-    const btnId = btn.id
-    btn.addEventListener('click', () => {
-        switch (btnId) {
-            case 'tout':
-                getWorks()
-                break
-            case 'objets':
-                filterWorks(1)
-                break
-            case 'appartement':
-                filterWorks(2)
-                break
-            case 'hotels&restaurant':
-                filterWorks(3)
-        }
-    })
-}
+
+
