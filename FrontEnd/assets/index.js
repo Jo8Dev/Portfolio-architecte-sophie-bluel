@@ -1,6 +1,6 @@
 // Récupération des éléments du DOM
 const gallery = document.querySelector('.gallery')
-const btnGroup = document.querySelector(".btn-group")
+const ulBtnGroup = document.querySelector(".btn-group")
 
 
 /**
@@ -12,7 +12,7 @@ function createListBtn(id, name) {
     //Recupération/Creation de la liste de bouttons et des buttons
     const li = document.createElement('li');
     li.innerHTML = `<button class="btn" id="${id}"> ${name} </button>`
-    btnGroup.appendChild(li)
+    ulBtnGroup.appendChild(li)
 }
 
 // Fonction pour récupérer les catégories et générer les boutons
