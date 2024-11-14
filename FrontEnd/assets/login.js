@@ -1,41 +1,52 @@
+import { API_URL } from "./config.js";
+
 async function login(email, password) {
-    const url = "http://localhost:5678/api/users/login"
     try {
-        const resp = await fetch(url, {
+        const resp = await fetch(API_URL + '/users/login', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 email,
-                password
+                password,
             })
         })
         if (!resp.ok) {
-            throw new Error(resp.status)
+            throw new Error(resp.status);
         }
-        else {
-            const result = await resp.json()
-            console.log(result)
-            alert(result.message)
-        }
+
+        return await resp.json();
     }
-    catch {
-        console.error(error.message)
+    catch (error) {
+        displayError()
     }
 }
 
-/*****Récuperation et écoute du formulaire***/
-const form = document.querySelector('form')
 
-form.addEventListener("submit", (e) => {
+/*****Récuperation et écoute du formulaire***/
+const form = document.querySelector('form');
+
+form.addEventListener("submit", async (e) => {
     // On empêche le comportement par défaut
-    e.preventDefault()
+    e.preventDefault();
 
     // Récuperation des deux champs
-    const inputEmail = document.getElementById("email").value
-    const inputPassword = document.getElementById("motsDePasse").value
+    const inputEmail = document.getElementById("email").value;
+    const inputPassword = document.getElementById("password").value;
 
     //appel de la fonction login()
-    login(inputEmail, inputPassword)
+    storeToken(await login(inputEmail, inputPassword));
 });
+
+function storeToken(datas) {
+    localStorage.setItem(datas.userId, datas.token);
+    window.location.href = "index.html"
+}
+
+function displayError() {
+    alert("L'identifiant ou le mot de passe saisi est incorrect. Veuillez essayer à nouveau.")   
+}
+
+
+
