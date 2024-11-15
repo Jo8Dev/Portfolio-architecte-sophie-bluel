@@ -31,22 +31,25 @@ form.addEventListener("submit", async (e) => {
     // On empêche le comportement par défaut
     e.preventDefault();
 
+    //creation d'un Objet formdata
+    const formData = new FormData(form);
+
     // Récuperation des deux champs
-    const inputEmail = document.getElementById("email").value;
-    const inputPassword = document.getElementById("password").value;
+    const inputEmail = formData.get("email");
+    const inputPassword = formData.get("password");
 
     //appel de la fonction login()
     storeToken(await login(inputEmail, inputPassword));
 });
 
 function storeToken(datas) {
-    localStorage.setItem(datas.userId, datas.token);
+    const token = 'token'
+    localStorage.setItem(token, datas.token);
     window.location.href = "index.html"
 }
 
 function displayError() {
-    alert("L'identifiant ou le mot de passe saisi est incorrect. Veuillez essayer à nouveau.")   
+    alert("Erreur dans l’identifiant ou le mot de passe")   
 }
-
 
 

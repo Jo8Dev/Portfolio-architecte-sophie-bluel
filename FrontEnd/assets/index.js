@@ -25,8 +25,8 @@ function createListBtn(id, name) {
     });
 
     ulBtnGroup.appendChild(li);
-    li.appendChild(btn)
-}
+    li.appendChild(btn);
+};
 
 // Fonction pour récupérer les catégories
 async function getCategories() {
@@ -34,7 +34,7 @@ async function getCategories() {
     if (!resp.ok) throw new Error(resp.status);
 
     return await resp.json();
-}
+};
 
 /**
  * Affiche les boutons
@@ -48,7 +48,7 @@ function displayCategories(categories) {
     for (const categorie of categories) {
         createListBtn(categorie.id, categorie.name);
     }
-}
+};
 
 
 /**
@@ -62,8 +62,8 @@ function displayWorks(datas) {
         const figure = document.createElement('figure');
         figure.innerHTML = `<img src="${data.imageUrl}" alt="${data.title}"><figcaption>${data.title}</figcaption>`;
         gallery.appendChild(figure);
-    };
-}
+    }
+};
 
 /**
  * Lance le fetch API et ajoute les données
@@ -73,7 +73,7 @@ async function getWorks() {
     if (!requete.ok) throw new Error(requete.status);
 
     return await requete.json();
-}
+};
 
 /**
  * Filtre les elements à afficher
@@ -81,16 +81,29 @@ async function getWorks() {
  */
 function filterWorks(works, id) {
     return works.filter((work) => work.categoryId === id);
+};
+
+function checkToken() {
+    if (localStorage.getItem('token')) {
+        return true
+    }
+    return false
+};
+
+function displayEditionMode() {
+    //ajout du bandeau du mode edition
+
+    //transformation de login en logout
+    const logOutText = document.querySelector('#login-link')
+    logOutText.textContent = 'logout'
+};
+
+
+//Test sur la présence ou non du token d'identification et gestion de l'affichage Works et Catégorie ou Mode edition
+if (checkToken()) {
+    displayEditionMode();
+    displayWorks(await getWorks());
+} else {
+    displayWorks(await getWorks());
+    displayCategories(await getCategories());
 }
-
-
-//Affichage Categories et Works
-displayCategories(
-    await getCategories(),
-);
-
-displayWorks(
-    await getWorks(),
-);
-
-
