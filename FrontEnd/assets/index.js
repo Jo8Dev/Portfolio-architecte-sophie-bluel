@@ -100,12 +100,21 @@ function displayEditionMode() {
 
 }
 
-function hideEditionMode() {
+/*function hideEditionMode() {
     const banner = document.querySelector('.banner');
     banner.style.display = 'none';
     banner.style.visibility = 'hidden';
-}
+}*/
 
+function displayModalGallery(datas) {
+    const gallery = document.querySelector('dialog .gallery');
+    gallery.innerHTML = '';//Reinitialise .gallery
+    for (const data of datas) {
+        const figure = document.createElement('figure');
+        figure.innerHTML = `<img src="${data.imageUrl}" alt="${data.title}">`;
+        gallery.appendChild(figure);
+    }
+}
 
 //Test sur la présence ou non du token d'identification et gestion de l'affichage Works et Catégorie ou Mode edition
 if (checkToken()) {
@@ -117,15 +126,17 @@ if (checkToken()) {
 }
 
 const dialog = document.querySelector("dialog");
-const showButton = document.querySelector("dialog + button");
-const closeButton = document.querySelector("dialog button");
+const showButton = document.querySelector(".modalLink");
+const closeButton = document.querySelector(".close");
 
 // Le bouton "Afficher la fenêtre" ouvre le dialogue
-showButton.addEventListener("click", () => {
-  dialog.showModal();
+showButton.addEventListener("click", async () => {
+    dialog.showModal();
+    displayModalGallery(await getWorks())
+    console.log(document.querySelector('dialog .gallery'))
 });
 
 // Le bouton "Fermer" ferme le dialogue
 closeButton.addEventListener("click", () => {
-  dialog.close();
+    dialog.close();
 });
