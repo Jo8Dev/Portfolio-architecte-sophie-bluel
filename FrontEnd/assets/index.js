@@ -95,6 +95,11 @@ function displayEditionMode() {
     const banner = document.querySelector('.banner');
     banner.style.display = 'flex';
     banner.style.visibility = 'visible';
+
+    const modalLink = document.querySelector('.edit a')
+    modalLink.style.display = 'flex'
+    modalLink.style.visibility = 'visible';
+
     //transformation de login en logout
     document.querySelector('#login-link').textContent = "logout";
 
@@ -126,7 +131,7 @@ if (checkToken()) {
 }
 
 const dialog = document.querySelector("dialog");
-const showButton = document.querySelector(".modalLink");
+const showButton = document.querySelector(".edit a");
 const closeButton = document.querySelector(".close");
 
 // Le bouton "Afficher la fenêtre" ouvre le dialogue
