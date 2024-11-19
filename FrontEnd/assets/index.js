@@ -138,7 +138,6 @@ const closeButton = document.querySelector(".close");
 showButton.addEventListener("click", async () => {
     dialog.showModal();
     displayModalGallery(await getWorks())
-    console.log(document.querySelector('dialog .gallery'))
 });
 
 // Le bouton "Fermer" ferme le dialogue
