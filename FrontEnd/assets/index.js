@@ -92,11 +92,19 @@ function checkToken() {
 
 function displayEditionMode() {
     //ajout du bandeau du mode edition
-
+    const banner = document.querySelector('.banner');
+    banner.style.display = 'flex';
+    banner.style.visibility = 'visible';
     //transformation de login en logout
-    const logOutText = document.querySelector('#login-link')
-    logOutText.textContent = 'logout'
-};
+    document.querySelector('#login-link').textContent = "logout";
+
+}
+
+function hideEditionMode() {
+    const banner = document.querySelector('.banner');
+    banner.style.display = 'none';
+    banner.style.visibility = 'hidden';
+}
 
 
 //Test sur la présence ou non du token d'identification et gestion de l'affichage Works et Catégorie ou Mode edition
@@ -107,3 +115,17 @@ if (checkToken()) {
     displayWorks(await getWorks());
     displayCategories(await getCategories());
 }
+
+const dialog = document.querySelector("dialog");
+const showButton = document.querySelector("dialog + button");
+const closeButton = document.querySelector("dialog button");
+
+// Le bouton "Afficher la fenêtre" ouvre le dialogue
+showButton.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+// Le bouton "Fermer" ferme le dialogue
+closeButton.addEventListener("click", () => {
+  dialog.close();
+});

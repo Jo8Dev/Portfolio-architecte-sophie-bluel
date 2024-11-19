@@ -3,87 +3,19 @@
    License: none (public domain)
 */
 
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -142,17 +74,49 @@ table {
 }
 
 body {
-	max-width: 1140px;
-	margin: auto;
+	background-color: var(--bg-color);
 	font-family: 'Work Sans';
 	font-size: 14px;
-	background-color: var(--bg-color);
+	margin: auto;
 }
 
-header {
+header{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.banner {
+	width: 100%;
+	height: 59px;
+	background-color: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	color: white;
+}
+
+.banner > a {
+	color: white;
+	display: flex;
+	flex-direction: row;	
+}
+
+.header {
+	max-width: 1140px;
+	width: 100%;
+	border: #B1663C 1px ;
+	margin: auto;
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
+}
+
+main {
+	max-width: 1140px;
+	margin: auto;
+	background-color: var(--bg-color);
 }
 
 section {
@@ -181,6 +145,18 @@ h2 {
 	color: var(--main-color)
 }
 
+.modify{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.modify a {
+	padding-top: 10px;
+	margin-left: 30px;
+}
+
+
 a {
 	text-decoration: none;
 	color: black;
@@ -204,7 +180,7 @@ nav li {
 
 li:hover {
 	color: var(--title-color);
-}
+} 
 
 #introduction {
 	display: flex;
@@ -274,7 +250,6 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
 #contact {
@@ -325,21 +300,42 @@ input[type="submit"] {
 	border-radius: 60px;
 }
 
-
+footer{
+	background-color: white;
+	height: 60px;
+}
 
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
+	align-items: center;
 	margin: 2em
 }
 
+
+/* The Modal (background) */
+dialog{
+	height: 688px;
+	width: 630px;
+  }
+
+  ::backdrop {
+	background-image: linear-gradient(
+	  45deg,
+	  magenta,
+	  rebeccapurple,
+	  dodgerblue,
+	  green
+	);
+	opacity: 0.75;
+  }
 /********Login*******/
 
 #login {
 	width: 50%;
 	margin: auto;
 	margin-top: 200px;
-	margin-bottom:600px;
+	margin-bottom: 600px;
 }
 
 #login>h2 {
@@ -366,4 +362,3 @@ footer nav ul {
 	text-align: center;
 	text-decoration: underline;
 }
-
