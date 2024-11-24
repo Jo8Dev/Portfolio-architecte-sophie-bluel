@@ -383,11 +383,21 @@ dialog .gallery img {
 	color: white;
 }
 
-.close {
-	width: 100%;
-	font-size: 30px;
+.modal-content nav {
+	margin-top: 10px;
+	width: 90%;
 	display: flex;
-	justify-content: right;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.modal-content nav i {
+	font-size: large;
+	cursor: pointer;
+}
+
+.close {
+	font-size: 30px;
 	cursor: pointer;
 }
 
