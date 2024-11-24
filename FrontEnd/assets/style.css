@@ -23,29 +23,40 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
-ol, ul {
+
+ol,
+ul {
 	list-style: none;
 }
-blockquote, q {
+
+blockquote,
+q {
 	quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 /** end reset css**/
 :root {
 	--bg-color: #FFFEF8;
@@ -73,6 +84,8 @@ header {
 	background-color: black;
 	display: none;
 	visibility: hidden;
+	position: fixed;
+	margin-top: -113px;
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
@@ -190,7 +203,9 @@ li:hover {
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 1.8em;
+	max-width: 404px;
+
 }
 
 #portfolio h2 {
@@ -238,6 +253,7 @@ li:hover {
 
 #contact {
 	width: 50%;
+	max-width: 379px;
 	margin: auto;
 }
 
@@ -313,8 +329,39 @@ dialog {
 }
 
 .modal-content p {
-	font-size:26px ;
+	font-size: 26px;
 }
+
+.modal-content figure{
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+}
+
+.trash-icon {
+	position: absolute;
+	background-color: black;
+	border-radius: 2px;
+	margin-top: 5px;
+	margin-right: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 17px;
+	height: 17px;
+}
+
+.trash-icon:hover {
+	cursor: pointer;
+}
+
+.fa-trash-can {
+	position: absolute;
+	color: white;
+	font-size: x-small;
+}
+
 
 dialog .gallery {
 	max-width: 420px;
@@ -325,6 +372,7 @@ dialog .gallery {
 	border-bottom: 1px solid #B3B3B3;
 	padding-bottom: 60px;
 }
+
 dialog .gallery img {
 	max-width: 76px;
 }
@@ -355,6 +403,7 @@ dialog .gallery img {
 	margin: auto;
 	margin-top: 200px;
 	margin-bottom: 600px;
+	max-width: 379px;
 }
 
 #login>h2 {
