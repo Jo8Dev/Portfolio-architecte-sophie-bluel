@@ -12,7 +12,7 @@
 	<meta name="description" content="">
 	<script src="https://kit.fontawesome.com/1d3336884d.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="./assets/style.css">
-	<script src="assets/index.js" type="module" defer></script>
+	<script src="assets/index.js" type="module"></script>
 </head>
 
 <body>
@@ -78,16 +78,42 @@
 			</ul>
 		</nav>
 	</footer>
+
 	<dialog>
-		<div class="modal-content">
-			<nav class="modal-nav">
-				<i></i>
-				<span class="close">&times;</span>
-			</nav>
-			<p></p>
-			<div class="gallery"></div>
-			<button class="btn">Ajouter une photo</button>
-		</div>
+		<nav class="modal-nav">
+			<i class="fa-solid fa-arrow-left" id="back"></i>
+			<span class="close">&times;</span>
+		</nav>
+		<div id="modal-container"></div>
+		<button class="btn">Ajouter une photo</button>
 	</dialog>
-</body>
+
+	<template id="modal-gallery-layout">
+		<div class="modal-content">
+			<p>Galerie photo</p>
+			<div class="gallery"></div>
+		</div>
+	</template>
+
+	<template id="modal-add-layout">
+		<div class="modal-content">
+			<p>Ajout photo</p>
+			<form class="add-photo-form" action="/upload" method="POST" enctype="multipart/form-data">
+				<div class="add-photo-container">
+					<i class="fa-regular fa-image" style="color: #b9c5cc;"></i>
+					<label for="file">+ Ajouter photo</button></label>
+					<input type="file" name="file" id="file" accept=".jpg, .png" required>
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<div class="add-photo-input">
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title" required>
+					<label for="categorie">Catégorie</label>
+					<select name="categorie" id="categorie" required></select>
+				</div>
+				<button class="btn btn-disabled" type="submit" disabled>Valider</button>
+			</form>
+		</div>
+	</template>
+
 </html>

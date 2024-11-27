@@ -89,12 +89,21 @@ function filterWorks(works, id) {
  * Vérifie la présence de token et sa validité
  * @returns boolean
  */
-function checkToken() {
-    if (localStorage.getItem('token')) {
-        return true
+function isTokenExpired() {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+        return true; // Pas de token, on considère qu'il est expiré.
     }
-    return false
-};
+    
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const expirationDate = new Date(payload.exp * 1000);
+        return new Date() > expirationDate; // Retourne true si le token est expiré.
+    } catch (e) {
+        return true; // En cas d'erreur (token mal formé), on considère qu'il est expiré.
+    }
+}
 
 
 /**
@@ -123,15 +132,13 @@ function displayEditionMode() {
 
 };
 
-//Test sur la présence ou non du token d'identification et gestion de l'affichage Works et Catégorie ou Mode edition
-if (checkToken()) {
+//Gestion de l'affichage Works et Catégorie ou Mode edition en fonction de la présence ou non et de l'expiration ou non du token
+if (!isTokenExpired()) {
     displayEditionMode();//Affiche le mode edition
-    modal.handleModal();//Gestion de l'ouverture/fermeture de la modale
     displayWorks(await getWorks());//Affiche les travaux dans la mini gallery
+    modal.handleModal();//Gestion la modale
 
 } else {
     displayWorks(await getWorks());//Affiche les travaux dans la gallery
     displayCategories(await getCategories());//Affiche les boutons de tri
 };
-
-
