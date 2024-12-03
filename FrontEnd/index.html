@@ -17,7 +17,7 @@
 
 <body>
 	<header>
-		<div class="banner"><i class="fa-regular fa-pen-to-square"></i><span>Mode
+		<div class="banner"><span><i class="fa-regular fa-pen-to-square"></i> Mode
 				édition</span></div>
 		<div class="header">
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
@@ -79,13 +79,16 @@
 		</nav>
 	</footer>
 
+
 	<dialog>
-		<nav class="modal-nav">
-			<i class="fa-solid fa-arrow-left" id="back"></i>
-			<span class="close">&times;</span>
-		</nav>
-		<div id="modal-container"></div>
-		<button class="btn">Ajouter une photo</button>
+		<div class="modal-container">
+			<nav class="modal-nav">
+				<i class="fa-solid fa-arrow-left" id="back"></i>
+				<span class="close">&times;</span>
+			</nav>
+			<div id="template-container"></div>
+			<button class="btn">Ajouter une photo</button>
+		</div>
 	</dialog>
 
 	<template id="modal-gallery-layout">
@@ -100,8 +103,9 @@
 			<p>Ajout photo</p>
 			<form class="add-photo-form" action="/upload" method="POST" enctype="multipart/form-data">
 				<div class="add-photo-container">
+					<img class="add-photo" src="" alt="">
 					<i class="fa-regular fa-image" style="color: #b9c5cc;"></i>
-					<label for="file">+ Ajouter photo</button></label>
+					<label for="file">+ Ajouter photo</label>
 					<input type="file" name="file" id="file" accept=".jpg, .png" required>
 					<p>jpg, png : 4mo max</p>
 				</div>

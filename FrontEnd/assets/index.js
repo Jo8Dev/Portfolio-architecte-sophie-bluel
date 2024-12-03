@@ -32,7 +32,7 @@ function createListBtn(id, name) {
 /**
  *Fonction pour récupérer les catégories  
  */
-async function getCategories() {
+export async function getCategories() {
     const resp = await fetch(API_URL + "/categories");
     if (!resp.ok) throw new Error(resp.status);
 
