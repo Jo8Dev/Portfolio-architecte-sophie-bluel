@@ -2,6 +2,19 @@ import * as index from "./index.js";
 import { API_URL } from "./config.js";
 
 /**
+ * Injecte un template dans le conteneur de la modale.
+ * @param {string} templateId - ID du template à injecter.
+ */
+function injectTemplate(templateId) {
+    const container = document.getElementById("template-container");
+    const template = document.getElementById(templateId).content.cloneNode(true);
+
+    // Nettoie le contenu avant d'ajouter un nouveau template
+    container.innerHTML = "";
+    container.appendChild(template);
+}
+
+/**
  * Affichage de la mini galerie de la modale
  */
 export function displayModalGallery(datas) {
@@ -102,8 +115,8 @@ async function displayModalCategorie(data = []) {
 
     await data.forEach(cat => {
         const option = document.createElement('option');
-        option.value = cat.id; // Utilisez la clé appropriée.
-        option.textContent = cat.name; // Utilisez la clé appropriée.
+        option.value = cat.id; 
+        option.textContent = cat.name;
         categorie.appendChild(option);
     });
 }
@@ -129,21 +142,6 @@ function handleSubmitButton() {
     fileInput.addEventListener('change', checkFormValidity);
     titleInput.addEventListener('input', checkFormValidity);
 }
-
-/**
- * Gere l'affichage du formulaire d'envoi de photo
- */
-async function handleAddForm() {
-    previewFile();
-    displayModalCategorie();
-    displayModalCategorie(await index.getCategories());
-    handleSubmitButton();
-    document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
-        e.preventDefault(); // Empêche le rechargement de la page
-        addWork();
-    });
-}
-
 
 async function addWork() {
     const form = document.querySelector('.add-photo-form');
@@ -185,26 +183,12 @@ async function addWork() {
         }
 
         handleModal(); // Réactualisation de la galerie ou fermeture de la modale
-        location.reload();
+        location.reload();//recharge la page suite a la soumission du formulaire
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout :', error);
         alert("Une erreur s'est produite lors de l'ajout.");
     }
-}
-
-
-/**
- * Injecte un template dans le conteneur de la modale.
- * @param {string} templateId - ID du template à injecter.
- */
-function injectTemplate(templateId) {
-    const container = document.getElementById("template-container");
-    const template = document.getElementById(templateId).content.cloneNode(true);
-
-    // Nettoie le contenu avant d'ajouter un nouveau template
-    container.innerHTML = "";
-    container.appendChild(template);
 }
 
 /**
@@ -228,7 +212,6 @@ function displayButton(button) {
         button.style.display = "inline-block";
     }
 }
-
 
 /**
  * Gestion des boutons pour ouvrir ou fermer la modale
@@ -255,6 +238,20 @@ export function handleModal() {
             displayButton(addButton);
         })
     });
+
+/**
+ * Gere l'affichage du formulaire d'envoi de photo
+ */
+async function handleAddForm() {
+    previewFile();
+    displayModalCategorie();
+    displayModalCategorie(await index.getCategories());
+    handleSubmitButton();
+    document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
+        e.preventDefault(); // Empêche le rechargement de la page
+        addWork();
+    });
+}
 
 
     // écoute du bouton X afin de fermer la fenetre de dialogue
