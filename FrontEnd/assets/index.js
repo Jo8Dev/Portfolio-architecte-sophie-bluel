@@ -57,7 +57,7 @@ function displayCategories(categories) {
  * Crée les éléments et ajoute les données récupérées de l'API aux éléments
  * @param {Array} datas Data des travaux (works)
  */
-function displayWorks(datas) {
+export function displayWorks(datas) {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';//Reinitialise .gallery
     for (const data of datas) {

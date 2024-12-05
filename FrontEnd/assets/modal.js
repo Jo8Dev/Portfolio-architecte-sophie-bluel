@@ -27,14 +27,14 @@ export function displayModalGallery(datas) {
         image.alt = data.title;
 
         //ajout du texte
-        title.textContent = "Galerie photo"
+        title.textContent = "Galerie photo";
 
         //ajout des élément aux DOM
         figure.appendChild(trashIcon);
         trashIcon.appendChild(icon);
         figure.appendChild(image);
         gallery.appendChild(figure);
-    }
+    };
 }
 
 /**
@@ -60,6 +60,11 @@ export function deleteWork() {
                 throw new Error(resp.status);
             };
             alert("l'element a bien ete supprimé");
+
+            // Recharge la galerie sans recharger la page
+            const updatedWorks = await index.getWorks(); // Appel à l'API pour récupérer les nouvelles données
+            displayModalGallery(updatedWorks); // Affiche la galerie mise à jour
+            deleteWork();
         });
     });
 }
@@ -180,6 +185,7 @@ async function addWork() {
         }
 
         handleModal(); // Réactualisation de la galerie ou fermeture de la modale
+        location.reload();
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout :', error);
@@ -240,20 +246,21 @@ export function handleModal() {
 
     // écoute du bouton modifier afin d'ouvrir la fenetre de dialogue
     [showButton, showButtonBanner].forEach(button => {
-      button.addEventListener("click", async () => {
-        dialog.showModal();
-        injectTemplate("modal-gallery-layout");//Ajout du template mini gallery
-        displayModalGallery(await index.getWorks());
-        deleteWork();
-        hideButton(backButton);
-        displayButton(addButton);  
-    })
+        button.addEventListener("click", async () => {
+            dialog.showModal();
+            injectTemplate("modal-gallery-layout");//Ajout du template mini gallery
+            displayModalGallery(await index.getWorks());
+            deleteWork();
+            hideButton(backButton);
+            displayButton(addButton);
+        })
     });
 
 
     // écoute du bouton X afin de fermer la fenetre de dialogue
     closeButton.addEventListener("click", () => {
         dialog.close();
+        location.reload();
     });
 
     // écoute du bouton ajouter une photo afin d'ouvrir la page 2 de la modale
@@ -262,7 +269,6 @@ export function handleModal() {
         handleAddForm();
         displayButton(backButton);
         hideButton(addButton);
-        //handleAddForm();
     });
 
     //écoute de la fleche de retour 
@@ -278,6 +284,7 @@ export function handleModal() {
     window.addEventListener('click', (e) => {
         if (e.target === dialog) {
             dialog.close();
+            location.reload();
         }
     });
 }
