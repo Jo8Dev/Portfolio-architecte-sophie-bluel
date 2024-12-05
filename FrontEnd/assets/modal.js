@@ -183,7 +183,7 @@ async function addWork() {
         }
 
         handleModal(); // Réactualisation de la galerie ou fermeture de la modale
-        location.reload();//recharge la page suite a la soumission du formulaire
+        location.reload();//recharge la page suite a la soumission du formulaire ???????????????????????????
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout :', error);
@@ -281,7 +281,7 @@ async function handleAddForm() {
     window.addEventListener('click', (e) => {
         if (e.target === dialog) {
             dialog.close();
-            location.reload();
+            location.reload();//??????????????????????????????????????????
         }
     });
 }
