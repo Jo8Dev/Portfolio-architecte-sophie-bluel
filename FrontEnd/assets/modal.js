@@ -1,5 +1,9 @@
-import * as index from "./index.js";
+import { getWorks, getCategories, deleteWork, cache, } from "./manager.js";
+import { displayWorks } from "./index.js";
 import { API_URL } from "./config.js";
+
+//Initialisation de variable
+const token = localStorage.getItem("token");
 
 /**
  * Injecte un template dans le conteneur de la modale.
@@ -17,69 +21,53 @@ function injectTemplate(templateId) {
 /**
  * Affichage de la mini galerie de la modale
  */
-export function displayModalGallery(datas) {
+function displayModalGallery(datas) {
     const gallery = document.querySelector('dialog .gallery');
-    gallery.innerHTML = '';//Reinitialise .gallery
-    for (const data of datas) {
+    gallery.innerHTML = ''; // Réinitialise .gallery
 
-        //Creation des different element à ajouter à la popup
+    // Ajout du texte
+    document.querySelector(".modal-content p").textContent = "Galerie photo";
+
+    datas.forEach(data => {
+        // Création des éléments nécessaires
         const figure = document.createElement("figure");
         const image = document.createElement("img");
-        const icon = document.createElement('i');
-        const trashIcon = document.createElement("span");
-        const title = document.querySelector(".modal-content p")
+        const trashIcon = createTrashIcon();
 
-
-        //ajout de classes
-        trashIcon.classList.add("trash-icon");
-        trashIcon.id = data.id;//Ajoute un id = à l'id du work dans l'api pour la suppression
-        icon.classList.add("fa-duotone", "fa-solid", "fa-trash-can");//Affiche les icone de suprssion
-
-        //ajout des images
+        // Configuration de l'image
         image.src = data.imageUrl;
         image.alt = data.title;
 
-        //ajout du texte
-        title.textContent = "Galerie photo";
-
-        //ajout des élément aux DOM
-        figure.appendChild(trashIcon);
-        trashIcon.appendChild(icon);
-        figure.appendChild(image);
+        // Assemblage des éléments
+        figure.append(trashIcon, image);
         gallery.appendChild(figure);
-    };
-}
 
-/**
- * fonction pour supprimer les travaux de l'API
- */
-export function deleteWork() {
-    const btnDeleteNodelist = document.querySelectorAll(".trash-icon");
-    const btnDelete = Array.from(btnDeleteNodelist);
-
-    btnDelete.forEach(btn => {
-        btn.addEventListener("click", async () => {
-
-            const token = localStorage.getItem("token");//Récuperation du token
-
-            const resp = await fetch(API_URL + "/works/" + btn.id, {
-                method: "DELETE",
-                headers: {
-                    "Accept": "*/*",
-                    "Authorization": `Bearer ${token}`,
-                }
-            });
-            if (!resp.ok) {
-                throw new Error(resp.status);
-            };
-            alert("l'element a bien ete supprimé");
-
-            // Recharge la galerie sans recharger la page
-            const updatedWorks = await index.getWorks(); // Appel à l'API pour récupérer les nouvelles données
-            displayModalGallery(updatedWorks); // Affiche la galerie mise à jour
-            deleteWork();
+        // Écoute du clic sur trash icon
+        trashIcon.addEventListener("click", async () => {
+            await handleTrashClick(data.id);
         });
     });
+}
+
+// Fonction pour créer l'icône de suppression
+function createTrashIcon() {
+    const trashIcon = document.createElement("span");
+    const icon = document.createElement("i");
+
+    trashIcon.classList.add("trash-icon");
+    icon.classList.add("fa-duotone", "fa-solid", "fa-trash-can");
+
+    trashIcon.appendChild(icon);
+    return trashIcon;
+}
+
+// Fonction pour gérer la suppression d'un élément
+async function handleTrashClick(id) {
+    await deleteWork(id, token);
+    cache.delete("works"); // Vide le cache contenant les works
+    const works = await getWorks();
+    displayModalGallery(works);
+    displayWorks(works);
 }
 
 /**
@@ -110,12 +98,12 @@ function previewFile() {
  * Affiche les catégories dans le select via un fetch API
  * @param {Function} data fonction du fetch api
  */
-async function displayModalCategorie(data = []) {
+async function displayModalCategories(data = []) {
     const categorie = document.querySelector('#categorie');
 
     await data.forEach(cat => {
         const option = document.createElement('option');
-        option.value = cat.id; 
+        option.value = cat.id;
         option.textContent = cat.name;
         categorie.appendChild(option);
     });
@@ -156,7 +144,7 @@ async function addWork() {
     formData.append('title', titleInput.value);
     formData.append('category', categorySelect.value);
 
-    const token = localStorage.getItem("token");
+
 
     try {
         const response = await fetch(`${API_URL}/works`, {
@@ -183,7 +171,7 @@ async function addWork() {
         }
 
         handleModal(); // Réactualisation de la galerie ou fermeture de la modale
-        location.reload();//recharge la page suite a la soumission du formulaire ???????????????????????????
+
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout :', error);
@@ -232,32 +220,28 @@ export function handleModal() {
         button.addEventListener("click", async () => {
             dialog.showModal();
             injectTemplate("modal-gallery-layout");//Ajout du template mini gallery
-            displayModalGallery(await index.getWorks());
-            deleteWork();
+            displayModalGallery(await getWorks());
             hideButton(backButton);
             displayButton(addButton);
         })
     });
 
-/**
- * Gere l'affichage du formulaire d'envoi de photo
- */
-async function handleAddForm() {
-    previewFile();
-    displayModalCategorie();
-    displayModalCategorie(await index.getCategories());
-    handleSubmitButton();
-    document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
-        e.preventDefault(); // Empêche le rechargement de la page
-        addWork();
-    });
-}
-
+    /**
+     * Gere l'affichage du formulaire d'envoi de photo
+     */
+    async function handleAddForm() {
+        previewFile();
+        displayModalCategories(await getCategories())
+        handleSubmitButton();
+        document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
+            e.preventDefault(); // Empêche le rechargement de la page
+            addWork();
+        });
+    }
 
     // écoute du bouton X afin de fermer la fenetre de dialogue
     closeButton.addEventListener("click", () => {
         dialog.close();
-        location.reload();
     });
 
     // écoute du bouton ajouter une photo afin d'ouvrir la page 2 de la modale
@@ -271,8 +255,7 @@ async function handleAddForm() {
     //écoute de la fleche de retour 
     backButton.addEventListener("click", async () => {
         injectTemplate("modal-gallery-layout");
-        displayModalGallery(await index.getWorks());
-        deleteWork();
+        displayModalGallery(await getWorks());
         hideButton(backButton);
         displayButton(addButton);
     });
@@ -281,7 +264,6 @@ async function handleAddForm() {
     window.addEventListener('click', (e) => {
         if (e.target === dialog) {
             dialog.close();
-            location.reload();//??????????????????????????????????????????
         }
     });
 }

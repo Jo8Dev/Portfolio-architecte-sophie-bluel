@@ -1,5 +1,8 @@
-import { API_URL } from "./config.js";
-import * as modal from "./modal.js";
+import {handleModal} from "./modal.js";
+import {getCategories, getWorks, cache} from './manager.js';
+
+//Initialisation de variable afin de limiter les appels API
+export let cachedWorks = []; // Variable pour stocker les travaux récupérés
 
 /**
  * Création des boutons avec classe et id
@@ -16,7 +19,7 @@ function createListBtn(id, name) {
 
 
     btn.addEventListener("click", async () => {
-        let works = await getWorks();
+        let works = cache.get("works");
 
         if (id !== 0) {
             works = filterWorks(works, id);
@@ -30,20 +33,10 @@ function createListBtn(id, name) {
 };
 
 /**
- *Fonction pour récupérer les catégories  
- */
-export async function getCategories() {
-    const resp = await fetch(API_URL + "/categories");
-    if (!resp.ok) throw new Error(resp.status);
-
-    return await resp.json();
-};
-
-/**
  * Affiche les boutons
  * @param {*} categories 
  */
-function displayCategories(categories) {
+async function displayCategories(categories) {
     //creation du premier bouton
     createListBtn(0, 'Tous');
 
@@ -57,7 +50,7 @@ function displayCategories(categories) {
  * Crée les éléments et ajoute les données récupérées de l'API aux éléments
  * @param {Array} datas Data des travaux (works)
  */
-export function displayWorks(datas) {
+export async function displayWorks(datas) {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';//Reinitialise .gallery
     for (const data of datas) {
@@ -67,15 +60,7 @@ export function displayWorks(datas) {
     }
 };
 
-/**
- * Lance le fetch API et ajoute les données
- */
-export async function getWorks() {
-    const requete = await fetch(API_URL + "/works");
-    if (!requete.ok) throw new Error(requete.status);
 
-    return await requete.json();
-};
 
 /**
  * Filtre les elements à afficher
@@ -91,11 +76,11 @@ function filterWorks(works, id) {
  */
 function isTokenExpired() {
     const token = localStorage.getItem("token");
-    
+
     if (!token) {
         return true; // Pas de token, on considère qu'il est expiré.
     }
-    
+
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const expirationDate = new Date(payload.exp * 1000);
@@ -130,13 +115,13 @@ function displayEditionMode() {
         window.localStorage.removeItem("token");
     })
 
-};
+}
 
 //Gestion de l'affichage Works et Catégorie ou Mode edition en fonction de la présence ou non et de l'expiration ou non du token
 if (!isTokenExpired()) {
     displayEditionMode();//Affiche le mode edition
-    displayWorks(await getWorks());//Affiche les travaux dans la mini gallery
-    modal.handleModal();//Gestion la modale
+    displayWorks(await getWorks());//Affiche les travaux dans la gallery
+    handleModal();//Gestion la modale
 
 } else {
     displayWorks(await getWorks());//Affiche les travaux dans la gallery
