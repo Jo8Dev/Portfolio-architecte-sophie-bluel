@@ -163,6 +163,8 @@ li:hover {
 }
 
 /***************************************Main******************************************/
+/*****General*****/
+
 main {
 	max-width: 1140px;
 	margin: auto;
@@ -172,8 +174,6 @@ main {
 section {
 	margin: 50px 0
 }
-
-
 
 h2 {
 	font-family: 'Syne';
@@ -193,6 +193,30 @@ h2 {
 	visibility: hidden;
 	padding-top: 10px;
 	margin-left: 30px;
+}
+
+.btn {
+	font-family: 'Syne';
+	height: 36px;
+	border-radius: 60px;
+	min-width: 100px;
+	font-weight: 700;
+	font-size: 16px;
+	color: white;
+	background-color: var(--main-color);
+	border: none;
+}
+
+.btn:hover {
+	background-color: #0E2F28;
+	cursor: pointer;
+}
+
+.btn-small {
+	margin: auto;
+	margin-top: 30px;
+	max-width: 179px;
+	width: 100%;
 }
 
 /*****Introduction*****/
@@ -242,21 +266,15 @@ h2 {
 	margin: 20px;
 }
 
-.btn {
-	font-family: 'Syne';
-	height: 38px;
-	border-radius: 60px;
-	min-width: 100px;
-	font-weight: 700;
-	font-size: 16px;
+.btn-filter {
+	background-color: var(--bg-color);
 	color: var(--main-color);
-	border: var(--main-color) 1px solid;
+	border: 1px solid var(--main-color);
 }
 
-.btn:hover {
-	color: white;
-	background-color: var(--main-color);
-	cursor: pointer;
+.btn-filter:hover {
+	background-color:var(--main-color);
+	color: var(--bg-color);
 }
 
 .gallery {
@@ -296,7 +314,7 @@ h2 {
 	flex-direction: column;
 }
 
-#contact input {
+#contact input[type="text"],input[type="email"] {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -311,19 +329,6 @@ h2 {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-
-input[type="submit"] {
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: var(--main-color);
-	margin: 2em auto;
-	width: 180px;
-	text-align: center;
-	border-radius: 60px;
-}
-
-
 
 /***************************************Modal & Template******************************************/
 dialog {
@@ -565,16 +570,13 @@ footer nav ul {
 	flex-direction: column;
 }
 
-#login input {
+#login input[type="text"], input[type="password"] {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#login input[type=submit] {
-cursor: pointer;
-}
 
 #login label {
 	margin: 2em 0 1em 0;
@@ -583,4 +585,5 @@ cursor: pointer;
 #login a {
 	text-align: center;
 	text-decoration: underline;
+	margin-top: 30px;
 }

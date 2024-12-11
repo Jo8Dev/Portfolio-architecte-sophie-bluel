@@ -11,7 +11,7 @@ function createFilteringBtn(id, name) {
     const ulBtnGroup = document.querySelector(".btn-group");
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    btn.classList.add('btn');
+    btn.classList.add('btn','btn-filter');
     btn.innerText = name;
 
     //ajout d'un listener sur le bouton afin de filtrer
