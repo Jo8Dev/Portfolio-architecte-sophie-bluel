@@ -1,9 +1,9 @@
-import { getWorks, getCategories, deleteWork, cache, } from "./manager.js";
+import { getWorks, getCategories, deleteWork, cache, postWork, } from "./manager.js";
 import { displayWorks } from "./index.js";
-import { API_URL } from "./config.js";
 
 //Initialisation de variable
 const token = localStorage.getItem("token");
+const dialog = document.querySelector("dialog");
 
 /**
  * Injecte un template dans le conteneur de la modale.
@@ -13,9 +13,30 @@ function injectTemplate(templateId) {
     const container = document.getElementById("template-container");
     const template = document.getElementById(templateId).content.cloneNode(true);
 
-    // Nettoie le contenu avant d'ajouter un nouveau template
+    // Nettoie le contenu avant d'injecter un nouveau template
     container.innerHTML = "";
     container.appendChild(template);
+}
+
+// Fonction pour créer l'icône de suppression
+function createTrashIcon() {
+    const trashIcon = document.createElement("span");
+    const icon = document.createElement("i");
+
+    trashIcon.classList.add("trash-icon");
+    icon.classList.add("fa-duotone", "fa-solid", "fa-trash-can");
+
+    trashIcon.appendChild(icon);
+    return trashIcon;
+}
+
+// Fonction pour gérer la suppression d'un élément
+async function handleTrashClick(id) {
+    await deleteWork(id, token);
+    cache.delete("works"); // Vide le cache contenant les works
+    const works = await getWorks();
+    displayModalGallery(works);
+    displayWorks(works);
 }
 
 /**
@@ -49,26 +70,7 @@ function displayModalGallery(datas) {
     });
 }
 
-// Fonction pour créer l'icône de suppression
-function createTrashIcon() {
-    const trashIcon = document.createElement("span");
-    const icon = document.createElement("i");
 
-    trashIcon.classList.add("trash-icon");
-    icon.classList.add("fa-duotone", "fa-solid", "fa-trash-can");
-
-    trashIcon.appendChild(icon);
-    return trashIcon;
-}
-
-// Fonction pour gérer la suppression d'un élément
-async function handleTrashClick(id) {
-    await deleteWork(id, token);
-    cache.delete("works"); // Vide le cache contenant les works
-    const works = await getWorks();
-    displayModalGallery(works);
-    displayWorks(works);
-}
 
 /**
  * Gere la prévisualisation de la photo sélectionné
@@ -99,13 +101,13 @@ function previewFile() {
  * @param {Function} data fonction du fetch api
  */
 async function displayModalCategories(data = []) {
-    const categorie = document.querySelector('#categorie');
+    const category = document.querySelector('#category');
 
     await data.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat.id;
         option.textContent = cat.name;
-        categorie.appendChild(option);
+        category.appendChild(option);
     });
 }
 
@@ -133,45 +135,23 @@ function handleSubmitButton() {
 
 async function addWork() {
     const form = document.querySelector('.add-photo-form');
-    const formData = new FormData();
+    const formData = new FormData(form);
 
-    // Ajout des champs au FormData
-    const fileInput = document.querySelector('#file');
-    const titleInput = document.querySelector('#title');
-    const categorySelect = document.querySelector('#categorie');
-
-    formData.append('image', fileInput.files[0]);
-    formData.append('title', titleInput.value);
-    formData.append('category', categorySelect.value);
-
-
-
-    try {
-        const response = await fetch(`${API_URL}/works`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur : ${response.status}`);
-        }
-
-        alert("L'élément a été ajouté avec succès !");
-
+    try { 
+        await postWork(token, formData);
         // Réinitialise le formulaire
         form.reset();
-
+        // Vide le cache contenant les works
+        cache.delete("works");
+        //Fermeture de la modale
+        dialog.close();
+        //Réactualisation de la galerie  
+        displayWorks(await getWorks());
         // Réinitialise l'image de prévisualisation (si présente)
         const previewPhoto = document.querySelector('.add-photo');
         if (previewPhoto) {
             previewPhoto.src = ''; // Supprime l'image affichée
         }
-
-        handleModal(); // Réactualisation de la galerie ou fermeture de la modale
-
 
     } catch (error) {
         console.error('Erreur lors de l\'ajout :', error);
@@ -206,16 +186,13 @@ function displayButton(button) {
  */
 export function handleModal() {
     //recuperation des elements
-    const dialog = document.querySelector("dialog");
     const showButton = document.querySelector(".edit a");
     const showButtonBanner = document.querySelector(".banner span")
     const closeButton = document.querySelector(".close");
     const addButton = document.querySelector("dialog .btn");
     const backButton = document.querySelector("#back");
 
-
-
-    // écoute du bouton modifier afin d'ouvrir la fenetre de dialogue
+    // écoute des boutons modifier afin d'ouvrir la fenetre de dialogue
     [showButton, showButtonBanner].forEach(button => {
         button.addEventListener("click", async () => {
             dialog.showModal();

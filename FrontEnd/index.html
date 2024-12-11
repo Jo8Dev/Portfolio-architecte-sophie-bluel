@@ -102,18 +102,18 @@
 		<div class="modal-content">
 			<p>Ajout photo</p>
 			<form class="add-photo-form" action="/upload" method="POST" enctype="multipart/form-data">
-				<div class="add-photo-container">
+				<div class="add-photo-file-container">
 					<img class="add-photo" src="" alt="">
 					<i class="fa-regular fa-image"></i>
 					<label for="file">+ Ajouter photo</label>
-					<input type="file" name="file" id="file" accept=".jpg, .png" required>
+					<input type="file" name="image" id="file" accept=".jpg, .png" required>
 					<p>jpg, png : 4mo max</p>
 				</div>
 				<div class="add-photo-input">
 					<label for="title">Titre</label>
 					<input type="text" name="title" id="title" required>
-					<label for="categorie">Catégorie</label>
-					<select name="categorie" id="categorie" required></select>
+					<label for="category">Catégorie</label>
+					<select name="category" id="category" required></select>
 				</div>
 				<button class="btn btn-disabled" type="submit" disabled>Valider</button>
 			</form>

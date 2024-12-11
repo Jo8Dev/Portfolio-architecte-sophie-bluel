@@ -4,6 +4,7 @@ export let cache = new Map();
 
 /**
  * Récupération des travaux
+ * @returns {Array} array contenant les travaux
  */
 export async function getWorks() {
     // Vérifie si les travaux sont déjà dans le cache
@@ -21,6 +22,7 @@ export async function getWorks() {
 
 /**
  * Récupération des catégories
+ * @returns {Array} array contenant les catégories
  */
 export async function getCategories() {
     // Vérifie si les catégories sont déjà dans le cache
@@ -52,6 +54,24 @@ export async function deleteWork(id, token) {
         throw new Error(resp.status);
     };
     alert("l'element a bien ete supprimé");
-};
+}
 
 
+/**
+ * Post des travaux dans l'API
+ */
+export async function postWork(token, formData) {
+
+    const response = await fetch(`${API_URL}/works`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(`Erreur : ${response.status}`);
+    }
+    alert("L'élément a été ajouté avec succès !");
+}

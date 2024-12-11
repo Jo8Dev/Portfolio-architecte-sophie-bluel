@@ -1,15 +1,12 @@
 import {handleModal} from "./modal.js";
 import {getCategories, getWorks, cache} from './manager.js';
 
-//Initialisation de variable afin de limiter les appels API
-export let cachedWorks = []; // Variable pour stocker les travaux récupérés
-
 /**
  * Création des boutons avec classe et id
  * @param {number} id 
  * @param {string} name 
  */
-function createListBtn(id, name) {
+function createFilteringBtn(id, name) {
     //Recupération/Creation de la liste de bouttons et des buttons
     const ulBtnGroup = document.querySelector(".btn-group");
     const li = document.createElement('li');
@@ -17,11 +14,12 @@ function createListBtn(id, name) {
     btn.classList.add('btn');
     btn.innerText = name;
 
-
+    //ajout d'un listener sur le bouton afin de filtrer
     btn.addEventListener("click", async () => {
         let works = cache.get("works");
 
         if (id !== 0) {
+            //Filtre des catégories rattacher aux boutons par ID
             works = filterWorks(works, id);
         }
 
@@ -33,16 +31,16 @@ function createListBtn(id, name) {
 };
 
 /**
- * Affiche les boutons
- * @param {*} categories 
+ * Affiche les boutons de catégories
+ * @param {Array} categories array contenant les catégories 
  */
 async function displayCategories(categories) {
     //creation du premier bouton
-    createListBtn(0, 'Tous');
+    createFilteringBtn(0, 'Tous');
 
     //creation des boutons de l'API
-    for (const categorie of categories) {
-        createListBtn(categorie.id, categorie.name);
+    for (const category of categories) {
+        createFilteringBtn(category.id, category.name);//Récuperation de l'id et du name de l'API
     }
 };
 
@@ -92,7 +90,7 @@ function isTokenExpired() {
 
 
 /**
- * Affichage du mode edition pour l'utilisateur connecte
+ * Affichage du mode edition pour l'utilisateur connecté
  */
 function displayEditionMode() {
     //ajout du bandeau du mode edition
@@ -117,7 +115,7 @@ function displayEditionMode() {
 
 }
 
-//Gestion de l'affichage Works et Catégorie ou Mode edition en fonction de la présence ou non et de l'expiration ou non du token
+//Gestion de l'affichage Works et Catégorie, ou Mode edition en fonction de la présence et de l'expiration du token
 if (!isTokenExpired()) {
     displayEditionMode();//Affiche le mode edition
     displayWorks(await getWorks());//Affiche les travaux dans la gallery

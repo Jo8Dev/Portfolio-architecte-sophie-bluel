@@ -269,7 +269,8 @@ h2 {
 
 .gallery img {
 	width: 100%;
-	height: 489.27px ;
+	height: 489.27px;
+	object-fit: cover;
 }
 
 /*****Contact Form*****/
@@ -330,8 +331,7 @@ dialog {
 	width: 80%;
 	max-width: 630px;
 	padding: 0;
-	display: none;
-	/* Masque la boîte de dialogue */
+	display: none;/* Masque la boîte de dialogue */
 }
 
 dialog[open] {
@@ -462,7 +462,7 @@ dialog .btn {
 	height: 100%;
 }
 
-.add-photo-container {
+.add-photo-file-container {
 	background-color: #E8F1F6;
 	border-radius: 3px;
 	width: 100%;
@@ -471,18 +471,18 @@ dialog .btn {
 	align-items: center;
 }
 
-.add-photo-container img {
+.add-photo-file-container img {
 	position: fixed;
 	max-height: 172px;
 }
 
-.add-photo-container>i {
+.add-photo-file-container>i {
 	font-size: 76px;
 	margin-top: 20px;
 	color: #b9c5cc;
 }
 
-.add-photo-container label {
+.add-photo-file-container label {
 	max-width: 173px;
 	display: flex;
 	flex-direction: row;
@@ -501,7 +501,7 @@ input[type=file] {
 	display: none;
 }
 
-.add-photo-container>p {
+.add-photo-file-container>p {
 	font-size: 10px;
 	margin-bottom: 10px;
 }
