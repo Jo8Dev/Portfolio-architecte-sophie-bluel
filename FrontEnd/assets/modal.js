@@ -75,7 +75,7 @@ function displayModalGallery(datas) {
 /**
  * Gere la prévisualisation de la photo sélectionné
  */
-function previewFile() {
+function previewImageFile() {
     // Récupération des éléments
     const fileInput = document.querySelector("#file");
     const previewPhoto = document.querySelector('.add-photo');
@@ -137,7 +137,7 @@ async function addWork() {
     const form = document.querySelector('.add-photo-form');
     const formData = new FormData(form);
 
-    try { 
+    try {
         await postWork(token, formData);
         // Réinitialise le formulaire
         form.reset();
@@ -158,6 +158,20 @@ async function addWork() {
         alert("Une erreur s'est produite lors de l'ajout.");
     }
 }
+
+/**
+ * Gere l'affichage du formulaire d'envoi de photo
+ */
+async function handleAddForm() {
+    previewImageFile();
+    displayModalCategories(await getCategories())
+    handleSubmitButton();
+    document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
+        e.preventDefault(); // Empêche le rechargement de la page
+        addWork();
+    });
+}
+
 
 /**
  * 
@@ -202,19 +216,6 @@ export function handleModal() {
             displayButton(addButton);
         })
     });
-
-    /**
-     * Gere l'affichage du formulaire d'envoi de photo
-     */
-    async function handleAddForm() {
-        previewFile();
-        displayModalCategories(await getCategories())
-        handleSubmitButton();
-        document.querySelector('.add-photo-form').addEventListener('submit', (e) => {
-            e.preventDefault(); // Empêche le rechargement de la page
-            addWork();
-        });
-    }
 
     // écoute du bouton X afin de fermer la fenetre de dialogue
     closeButton.addEventListener("click", () => {
